@@ -1,5 +1,18 @@
 """
 Tests para las funciones de padding PKCS#7.
+Propmt: Genera los tests de las funciones con los siguientes casos como ejemplos ocupa los edge cases para validación más precisa.
+
+PADDING EXAMPLES:
+pkcs7_pad(b"HOLA", 8).hex()
+'484f4c4104040404'  # HOLA + 4 bytes con valor 0x04
+
+pkcs7_pad(b"12345678", 8).hex()  # Exactamente 8 bytes
+'31323334353637380808080808080808'  # + bloque completo
+
+UNPADDING EXAMPLES:
+padded = pkcs7_pad(b"HOLA", 8)
+pkcs7_unpad(padded)
+b'HOLA'
 """
 
 import pytest
