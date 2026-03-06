@@ -49,8 +49,8 @@ project/
 | Algoritmo | Tamaño de Clave | Tamaño de Bloque | Seguridad Efectiva |
 |-----------|-----------------|------------------|-------------------|
 | DES       | 64 bits (8 bytes) | 64 bits | 56 bits efectivos |
-| 3DES-2K   | 128 bits (16 bytes) | 64 bits | ~112 bits |
-| 3DES-3K   | 192 bits (24 bytes) | 64 bits | ~168 bits |
+| 3DES-2K   | 128 bits (16 bytes) | 64 bits | 112 bits |
+| 3DES-3K   | 192 bits (24 bytes) | 64 bits | 168 bits |
 | AES-256   | 256 bits (32 bytes) | 128 bits | 256 bits |
 
 #### Generación de claves (snippets de código)
@@ -79,9 +79,9 @@ def generate_aes_key(key_size: int = 256):
 
 | Hardware | Claves/segundo | Tiempo para 2^56 claves |
 |----------|---------------|------------------------|
-| GPU moderna (RTX 4090) | ~10^10 claves/s | ~8 días |
-| ASIC especializado | ~10^12 claves/s | ~2 horas |
-| Deep Crack (1998) | 9×10^10 claves/s | ~56 horas |
+| GPU moderna (RTX 4090) | 10^10 claves/s | 8 días |
+| ASIC especializado | 10^12 claves/s | 2 horas |
+| Deep Crack (1998) | 9×10^10 claves/s | 56 horas |
 
 En 1998, la EFF construyó "Deep Crack" por $250,000 USD que rompió DES en 56 horas. Hoy, con cloud computing, un ataque de fuerza bruta cuesta menos de $50 USD.
 
@@ -166,7 +166,7 @@ for i in range(0, 32, 16):
 
 # Resultado ECB:
 #   Bloque 1: 8f3c2a1d4b5e6f70...
-#   Bloque 2: 8f3c2a1d4b5e6f70...  ← IDÉNTICO
+#   Bloque 2: 8f3c2a1d4b5e6f70...  <- IDÉNTICO
 ```
 
 ```
@@ -174,15 +174,15 @@ Mensaje: "BLOQUE_REPETIDO!" × 4  (64 bytes = 4 bloques de 16)
 
 ECB Cifrado (hex):
   Bloque 1: 57324496c7a0b439e8f1d2c3a4b5c6d7
-  Bloque 2: 57324496c7a0b439e8f1d2c3a4b5c6d7  ← IDÉNTICO
-  Bloque 3: 57324496c7a0b439e8f1d2c3a4b5c6d7  ← IDÉNTICO
-  Bloque 4: 57324496c7a0b439e8f1d2c3a4b5c6d7  ← IDÉNTICO
+  Bloque 2: 57324496c7a0b439e8f1d2c3a4b5c6d7  <- IDÉNTICO
+  Bloque 3: 57324496c7a0b439e8f1d2c3a4b5c6d7  <- IDÉNTICO
+  Bloque 4: 57324496c7a0b439e8f1d2c3a4b5c6d7  <- IDÉNTICO
 
 CBC Cifrado (IV: a1b2c3d4...):
   Bloque 1: 20fd12a8feed3318c9d8e7f6a5b4c3d2
-  Bloque 2: 3d433db960b9f13c1a2b3c4d5e6f7081  ← DIFERENTE
-  Bloque 3: 0092b8444d1b56f99a8b7c6d5e4f3a2b  ← DIFERENTE
-  Bloque 4: 59b9eb5db8bff2d52c3d4e5f6a7b8c9d  ← DIFERENTE
+  Bloque 2: 3d433db960b9f13c1a2b3c4d5e6f7081  <- DIFERENTE
+  Bloque 3: 0092b8444d1b56f99a8b7c6d5e4f3a2b  <- DIFERENTE
+  Bloque 4: 59b9eb5db8bff2d52c3d4e5f6a7b8c9d  <- DIFERENTE
 ```
 
 **Escenario de riesgo real:** Si un atacante observa tráfico cifrado con ECB, puede detectar:
@@ -223,7 +223,7 @@ Resultado:
 IV fijo: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
 Cifrado 1: 8f3c2a1d4b5e6f70c8d9e0f1a2b3c4d5
 Cifrado 2: 8f3c2a1d4b5e6f70c8d9e0f1a2b3c4d5
-¿Idénticos? SÍ ← PROBLEMA
+¿Idénticos? SÍ <- PROBLEMA
 ```
 
 ```python
@@ -265,8 +265,8 @@ print(f"Bytes:    {list(padded)}")
 # Hex:      48454c4c4f
 # Padded:   48454c4c4f030303
 # Bytes:    [72, 69, 76, 76, 79, 3, 3, 3]
-#                              ↑   ↑  ↑
-#                         3 bytes de padding con valor 0x03
+#                                   
+# Se observan 3 bytes de padding con valor 0x03
 
 # Ejemplo 2: Mensaje de 8 bytes (múltiplo exacto)
 msg = b"12345678"  # 8 bytes
@@ -277,7 +277,7 @@ print(f"Longitud: {len(padded)} bytes")
 # Original: b'12345678' (8 bytes)
 # Padded:   31323334353637380808080808080808
 # Longitud: 16 bytes
-#           ↑ Se agrega bloque completo de 8 bytes con valor 0x08
+# Se agrega bloque completo de 8 bytes con valor 0x08
 
 # Ejemplo 3: Mensaje de 10 bytes
 msg = b"HOLA MUNDO"  # 10 bytes
@@ -288,7 +288,7 @@ print(f"Bytes:    {list(padded)}")
 # Original: b'HOLA MUNDO' (10 bytes)
 # Padded:   484f4c41204d554e444f060606060606
 # Bytes:    [72,79,76,65,32,77,85,78,68,79, 6, 6, 6, 6, 6, 6]
-#                                          ↑  padding 6 bytes
+# padding 6 bytes
 ```
 
 **Reglas PKCS#7:**
@@ -299,7 +299,7 @@ print(f"Bytes:    {list(padded)}")
 **Recuperación del mensaje original:**
 ```python
 unpadded = pkcs7_unpad(padded)
-assert unpadded == msg  # Siempre se recupera exactamente el original
+assert unpadded == msg
 ```
 
 ---
@@ -348,7 +348,6 @@ const cipher = crypto.createCipheriv('aes-256-gcm', key, nonce);
 let encrypted = cipher.update(plaintext, 'utf8', 'hex');
 encrypted += cipher.final('hex');
 const tag = cipher.getAuthTag();
-// Transmitir: nonce + tag + encrypted
 ```
 
 **Go:**
